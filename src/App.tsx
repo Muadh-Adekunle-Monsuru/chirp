@@ -7,7 +7,7 @@ function App() {
 	return (
 		<div className='font-rubik bg-blueBg min-h-screen w-full lg:p-10 p-5 flex flex-col items-center'>
 			{store.map((post) => (
-				<PostCard data={post} />
+				<PostCard data={post} key={post.id} />
 			))}
 
 			<CreatePost />
