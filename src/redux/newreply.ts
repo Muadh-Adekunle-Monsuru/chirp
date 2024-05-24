@@ -4,11 +4,13 @@ interface Post {
 	'content': string;
 	'createdAt': string;
 	'votes': string[];
+	'replyingTo': string;
 	'poster': {
 		'profile': string;
 		'username': string;
 	};
 	replies: [];
+	ReplyInputShown: boolean;
 }
 
 const initialState: Post = {
@@ -16,36 +18,47 @@ const initialState: Post = {
 	'content': '',
 	'createdAt': '',
 	'votes': [],
+	'replyingTo': '',
 	'poster': {
 		'profile': '',
 		'username': '',
 	},
+	ReplyInputShown: false,
 	replies: [],
 };
 const dataSlice = createSlice({
 	name: 'posts',
 	initialState,
 	reducers: {
-		setId: (state) => {
+		setReplyId: (state) => {
 			const date = new Date();
 			state.id = date.getTime().toString();
 		},
-		updateContent: (state, action) => {
+		updateReplyContent: (state, action) => {
 			state.content = action.payload;
 		},
-		setCreatedAt: (state, action) => {
+		setReplyCreatedAt: (state, action) => {
 			state.createdAt = action.payload;
 		},
-		setProfile: (state, action) => {
+		setReplyProfile: (state, action) => {
 			state.poster.profile = action.payload;
 		},
-		setUsername: (state, action) => {
+		setReplyUsername: (state, action) => {
 			state.poster.username = action.payload;
+		},
+		setReplyingTo: (state, action) => {
+			state.replyingTo = action.payload;
 		},
 	},
 });
 
-export const { updateContent, setCreatedAt, setProfile, setUsername, setId } =
-	dataSlice.actions;
+export const {
+	updateReplyContent,
+	setReplyCreatedAt,
+	setReplyProfile,
+	setReplyUsername,
+	setReplyId,
+	setReplyingTo,
+} = dataSlice.actions;
 
 export default dataSlice.reducer;

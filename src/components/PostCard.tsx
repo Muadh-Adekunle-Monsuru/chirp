@@ -1,9 +1,18 @@
 import Counter from './Counter';
+import CreateReply from './CreateReply';
 import ReplyCard from './ReplyCard';
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState } from '../redux/store';
+import { toggleReplyInput } from '../redux/data';
 export default function PostCard(props: any) {
+	const dispatch = useDispatch();
 	const { poster, createdAt, content, id, replies } = props.data;
+	const ReplyInput = useSelector(
+		(state: RootState) =>
+			state.posts.find((post) => post.id == id)?.ReplyInputShown
+	);
 	return (
-		<div className=''>
+		<div className='w-full'>
 			<div
 				className='bg-slate-50 p-5 flex flex-col lg:flex-row my-2 rounded-lg shadow-sm md:w-[60%] gap-4 relative w-full mx-auto'
 				key={id}
@@ -26,7 +35,10 @@ export default function PostCard(props: any) {
 					<p className='font-light flex-grow'>{content}</p>
 				</div>
 				<div className='absolute bottom-5 right-10 md:top-7 font-semibold text-xs text-purple-900 flex gap-1 cursor-pointer'>
-					<div className='flex content-center gap-1'>
+					<div
+						className='flex content-center gap-1'
+						onClick={() => dispatch(toggleReplyInput(id))}
+					>
 						<i className='fa fa-reply '></i>
 						<p>Reply</p>
 					</div>
@@ -34,8 +46,14 @@ export default function PostCard(props: any) {
 			</div>
 			<div className='flex flex-col justify-center items-center'>
 				{replies.map((val: any) => (
-					<ReplyCard data={val} />
+					<ReplyCard
+						data={val}
+						key={val.id}
+						parentId={id}
+						replyingTo={poster.username}
+					/>
 				))}
+				{ReplyInput && <CreateReply replyingTo={poster.username} postId={id} />}
 			</div>
 		</div>
 	);

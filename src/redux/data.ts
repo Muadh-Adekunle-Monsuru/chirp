@@ -20,6 +20,7 @@ interface Post {
 		'username': string;
 	};
 	replies: Reply[];
+	ReplyInputShown: boolean;
 }
 
 type PostArray = Post[];
@@ -36,13 +37,14 @@ const initialState: PostArray = [
 				'https://api.dicebear.com/8.x/adventurer-neutral/svg?seed=Felix',
 			'username': 'fluffy-llama',
 		},
+		ReplyInputShown: false,
 		replies: [
 			{
 				'id': '3',
 				'content':
 					"If you're still new, I'd recommend focusing on the fundamentals of HTML, CSS, and JS before considering React. It's very tempting to jump ahead but lay a solid foundation first.",
 				'createdAt': '1 week ago',
-				'votes': [''],
+				'votes': [],
 				'replyingTo': 'maxblagun',
 				'poster': {
 					'profile':
@@ -92,9 +94,59 @@ const dataSlice = createSlice({
 				}
 			});
 		},
+		replyUpVote: (state, action) => {
+			state.map((post) => {
+				if (post.id == action.payload.parentId) {
+					post.replies.map((reply) => {
+						if (reply.id == action.payload.id) {
+							if (!reply.votes.includes(action.payload.username)) {
+								reply.votes.push(action.payload.username);
+							}
+						}
+					});
+				}
+			});
+		},
+		replyDownVote: (state, action) => {
+			state.map((post) => {
+				if (post.id == action.payload.parentId) {
+					post.replies.map((reply) => {
+						if (reply.id == action.payload.id) {
+							if (reply.votes.includes(action.payload.username)) {
+								reply.votes = reply.votes.filter(
+									(user) => user !== action.payload.username
+								);
+							}
+						}
+					});
+				}
+			});
+		},
+		addReply: (state, action) => {
+			state.map((post) => {
+				if (post.id == action.payload.id) {
+					post.replies.push(action.payload.data);
+				}
+			});
+		},
+		toggleReplyInput: (state, action) => {
+			state.map((post) => {
+				if (post.id == action.payload) {
+					post.ReplyInputShown = !post.ReplyInputShown;
+				}
+			});
+		},
 	},
 });
 
-export const { addPost, upVote, downVote } = dataSlice.actions;
+export const {
+	addPost,
+	upVote,
+	downVote,
+	replyUpVote,
+	replyDownVote,
+	addReply,
+	toggleReplyInput,
+} = dataSlice.actions;
 
 export default dataSlice.reducer;
