@@ -14,14 +14,13 @@ import {
 	colors,
 	adjectives,
 } from 'unique-names-generator';
-import { addPost } from '../redux/data';
 import { generateProfile } from '../utils';
+import CreateNewPost from '../query/NewPost';
 export default function CreatePost() {
+	const { mutate: sendData } = CreateNewPost();
 	const post = useSelector((state: RootState) => state.newPost);
 	const dispatch = useDispatch();
 	useEffect(() => {
-		const date = new Date();
-		dispatch(setCreatedAt(date.toDateString()));
 		dispatch(setProfile(generateProfile()));
 		const generateUsername = () => {
 			const customConfig: Config = {
@@ -38,9 +37,10 @@ export default function CreatePost() {
 	}, []);
 
 	const handlePost = () => {
+		const date = new Date();
+		dispatch(setCreatedAt(date.toISOString()));
 		dispatch(setId());
-		dispatch(addPost(post));
-		dispatch(updateContent(''));
+		sendData();
 	};
 	return (
 		<div className='bg-slate-100 p-5 flex flex-col lg:flex-row rounded-lg shadow-sm gap-4 sticky bottom-0 md:w-[60%] w-full min-h-32 justify-between border border-t lg:items-center'>

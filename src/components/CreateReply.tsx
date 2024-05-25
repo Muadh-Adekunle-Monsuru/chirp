@@ -9,14 +9,15 @@ import {
 	setReplyId,
 	setReplyingTo,
 } from '../redux/newreply';
-import { toggleReplyInput } from '../redux/data';
-import { addReply, addPost } from '../redux/data';
+import { addReply } from '../redux/data';
+import UpdatePost from '../query/UpdatePost';
 
 interface Prop {
 	replyingTo: string;
 	postId: string;
 }
 export default function CreateReply({ replyingTo, postId }: Prop) {
+	const updatePost = UpdatePost();
 	const reply = useSelector((state: RootState) => state.reply);
 	const post = useSelector((state: RootState) =>
 		state.posts.find((post) => post.id == postId)
@@ -35,7 +36,7 @@ export default function CreateReply({ replyingTo, postId }: Prop) {
 	const handlePost = () => {
 		dispatch(setReplyId());
 		dispatch(addReply({ id: post?.id, data: reply }));
-		dispatch(toggleReplyInput(post?.id));
+		updatePost.mutate(postId);
 		dispatch(updateReplyContent(''));
 	};
 	return (
@@ -44,7 +45,6 @@ export default function CreateReply({ replyingTo, postId }: Prop) {
 				<div className='w-full grid gap-2'>
 					<span className='font-bold text-xs'>replying to {replyingTo}</span>
 					<textarea
-						id='replyareatext'
 						className='border flex-grow p-1 rounded-lg h-full'
 						placeholder='Reply ...'
 						value={reply.content}
