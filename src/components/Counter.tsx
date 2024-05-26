@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { upVote, downVote } from '../redux/data';
+import { upVote } from '../redux/data';
 import { RootState } from '../redux/store';
 import UpdatePost from '../query/UpdatePost';
 type Vote = {
@@ -17,19 +17,16 @@ export default function Counter({ id }: Vote) {
 		updatePost.mutate(id);
 	};
 
-	const handleDownClick = () => {
-		dispatch(downVote({ id, user }));
-		updatePost.mutate(id);
-	};
 	return (
-		<div className='bg-purple-100/30 text-purple-900 p-2 flex gap-1 items-center justify-between lg:flex-col rounded-lg max-w-24'>
+		<div className='bg-purple-100/30 text-purple-900 p-2 flex gap-1 items-center justify-between lg:flex-col rounded-lg max-w-14'>
 			<div className='cursor-pointer' onClick={() => handleUPClick()}>
-				<i className='fa fa-up-long text-purple-200'></i>
+				<i
+					className={`fa-solid fa-heart  ${
+						store.votes.includes(user) ? 'text-purple-500' : 'text-purple-200'
+					} `}
+				></i>
 			</div>
 			<div className='font-semibold'>{store?.votes.length}</div>
-			<div className='cursor-pointer' onClick={() => handleDownClick()}>
-				<i className='fa fa-down-long text-purple-200'></i>
-			</div>
 		</div>
 	);
 }

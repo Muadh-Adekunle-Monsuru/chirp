@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { downVote, replyUpVote, replyDownVote } from '../redux/data';
+import { replyUpVote, replyDownVote } from '../redux/data';
 import { RootState } from '../redux/store';
 type Vote = {
 	id: string;

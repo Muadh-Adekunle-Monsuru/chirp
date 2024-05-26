@@ -53,6 +53,10 @@ const dataSlice = createSlice({
 				if (post.id == action.payload.id) {
 					if (!post.votes.includes(action.payload.user)) {
 						post.votes.push(action.payload.user);
+					} else {
+						post.votes = post.votes.filter(
+							(voter) => voter !== action.payload.user
+						);
 					}
 				}
 			});
