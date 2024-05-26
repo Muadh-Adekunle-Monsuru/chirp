@@ -8,7 +8,10 @@ const { Post } = require('./mongo');
 
 //recieve all data
 app.get('/posts', (req, res) => {
-	Post.find({}).then((posts) => res.json(posts));
+	Post.find({})
+		.sort({ createdAt: -1 })
+		.then((posts) => res.json(posts))
+		.catch((err) => res.status(500).json({ error: err.message }));
 });
 
 //add new post

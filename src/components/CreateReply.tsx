@@ -29,12 +29,16 @@ export default function CreateReply({ replyingTo, postId }: Prop) {
 		const date = new Date();
 		dispatch(setReplyUsername(currentPoster.username));
 		dispatch(setReplyProfile(currentPoster.profile));
-		dispatch(setReplyCreatedAt(date.toDateString()));
+		dispatch(setReplyCreatedAt(date.toISOString()));
 		dispatch(setReplyingTo(post?.poster.username));
+		dispatch(setReplyId());
+		dispatch(updateReplyContent(''));
 	}, []);
 
-	const handlePost = () => {
+	useEffect(() => {
 		dispatch(setReplyId());
+	}, [reply.content]);
+	const handlePost = () => {
 		dispatch(addReply({ id: post?.id, data: reply }));
 		updatePost.mutate(postId);
 		dispatch(updateReplyContent(''));

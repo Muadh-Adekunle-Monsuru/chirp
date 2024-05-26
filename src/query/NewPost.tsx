@@ -11,7 +11,7 @@ export default function CreateNewPost() {
 	return useMutation({
 		mutationFn: () => {
 			return axios
-				.post('http://localhost:8080/posts', store)
+				.post('https://smallposts-backend.vercel.app/posts', store)
 				.then((response) => {
 					console.log('data sent successfully');
 					dispatch(updateContent(''));

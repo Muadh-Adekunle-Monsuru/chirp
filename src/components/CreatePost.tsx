@@ -43,10 +43,14 @@ export default function CreatePost() {
 		sendData();
 	};
 	return (
-		<div className='bg-slate-100 p-5 flex flex-col lg:flex-row rounded-lg shadow-sm gap-4 sticky bottom-0 md:w-[60%] w-full min-h-32 justify-between border border-t lg:items-center'>
+		<div className='bg-slate-100 p-5 flex flex-col lg:flex-row rounded-lg shadow-sm gap-4 fixed bottom-0 md:w-[60%] w-full min-h-32 justify-between border border-t lg:items-center'>
 			<div className='flex gap-2 flex-grow items-center'>
-				<div className='w-7 h-7 rounded-full overflow-hidden '>
-					<img src={post.poster.profile} className='w-7 h-7' alt='avatar' />
+				<div className='w-7 h-7 rounded-full flex items-center justify-center '>
+					<img
+						src={post.poster.profile}
+						className='w-6 h-6 rounded-full '
+						alt='avatar'
+					/>
 				</div>
 				<div className='w-full grid gap-2'>
 					<span className='font-bold text-xs'>

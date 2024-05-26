@@ -6,10 +6,11 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../redux/store';
 import DeletePost from '../query/DeletePost';
 import { formatDistanceToNow } from 'date-fns';
+import { AnimatePresence, motion } from 'framer-motion';
 export default function PostCard(props: any) {
 	const [showReplyInput, SetShowReplyInput] = useState(false);
 	const { poster, createdAt, content, id, replies, _id } = props.data;
-	const [timeAgo, setTimeAgo] = useState(
+	const [timeAgo, _] = useState(
 		formatDistanceToNow(new Date(createdAt), { addSuffix: true })
 	);
 	const deletePost = DeletePost();
@@ -18,8 +19,9 @@ export default function PostCard(props: any) {
 	);
 
 	return (
-		<div className='w-full'>
-			<div
+		<motion.div layout className='w-full'>
+			<motion.div
+				layout
 				className='bg-slate-50 p-5 flex flex-col lg:flex-row my-2 rounded-lg  md:w-[60%] gap-4 relative w-full mx-auto'
 				key={id}
 			>
@@ -33,7 +35,7 @@ export default function PostCard(props: any) {
 								<div className='w-7 h-7 rounded-full overflow-hidden '>
 									<img src={poster.profile} className='w-7 h-7' alt='avatar' />
 								</div>
-								<span className='font-semibold text-sm'>
+								<span className='font-semibold text-sm select-none'>
 									{poster.username}{' '}
 									{currentUser == poster.username ? '(you)' : ''}
 								</span>
@@ -41,12 +43,12 @@ export default function PostCard(props: any) {
 							<div className='text-xs text-gray-400'>{timeAgo}</div>
 						</div>
 					</div>
-					<p className='font-light flex-grow'>{content}</p>
+					<p className='flex-grow'>{content}</p>
 				</div>
-				<div className='absolute bottom-5 right-10 md:top-7 font-semibold text-xs text-purple-900 flex gap-3 cursor-pointer '>
+				<div className='absolute bottom-5 right-10 md:top-7 font-semibold text-xs text-purple-900 flex gap-3 cursor-pointer select-none '>
 					{poster.username == currentUser ? (
 						<div
-							className='text-red-900'
+							className='text-red-900 '
 							onClick={() => deletePost.mutate(_id)}
 						>
 							<i className='fa fa-trash-can'></i>
@@ -60,23 +62,32 @@ export default function PostCard(props: any) {
 						onClick={() => SetShowReplyInput((val) => !val)}
 					>
 						<i className='fa fa-reply '></i>
-						<p>Reply</p>
+						<p>Replies ({replies.length})</p>
 					</div>
 				</div>
-			</div>
-			<div className='flex flex-col justify-center items-center'>
-				{replies.map((val: any) => (
-					<ReplyCard
-						data={val}
-						key={val.id}
-						parentId={id}
-						replyingTo={poster.username}
-					/>
-				))}
+			</motion.div>
+			<AnimatePresence>
 				{showReplyInput && (
-					<CreateReply replyingTo={poster.username} postId={id} />
+					<motion.div
+						layout
+						initial={{ y: '-0.1%', opacity: 0 }}
+						animate={{ y: 0, opacity: 1 }}
+						exit={{ y: '-10%', opacity: 0 }}
+						className='flex flex-col justify-center items-center'
+					>
+						{replies.map((val: any) => (
+							<ReplyCard
+								data={val}
+								key={val.id}
+								parentId={id}
+								replyingTo={poster.username}
+							/>
+						))}
+
+						<CreateReply replyingTo={poster.username} postId={id} />
+					</motion.div>
 				)}
-			</div>
-		</div>
+			</AnimatePresence>
+		</motion.div>
 	);
 }

@@ -12,7 +12,7 @@ export default function UpdatePost() {
 			try {
 				console.log('called');
 				const response = await axios.put(
-					`http://localhost:8080/posts/${post._id}`,
+					`https://smallposts-backend.vercel.app/posts/${post._id}`,
 					post
 				);
 				return response.data;

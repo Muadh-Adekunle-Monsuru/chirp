@@ -7,7 +7,7 @@ export default function DeletePost() {
 		mutationFn: async (_id) => {
 			try {
 				const response = await axios.delete(
-					`http://localhost:8080/posts/${_id}`
+					`https://smallposts-backend.vercel.app/posts/${_id}`
 				);
 
 				return response.data;
